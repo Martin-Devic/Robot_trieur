@@ -57,7 +57,7 @@ public class Test {
 	
 	
 	//méthode modifiant la matrice qui permet de faire l'affichage
-	public static void MatriceAffichage(Robot robot,List<Dechet> dechet,int[][] mat) {
+	public static void MatriceAffichage(Robot robot,List<Dechet> dechet,int[][] mat,List<Tas>tas) {
 		
 		for (int i=0;i<20;i++) {
 			for(int j=0;j<20;j++) {
@@ -70,8 +70,25 @@ public class Test {
 			}
 			else if (d.toString().contains("Verre")) {
 				mat[d.getX()][d.getY()]=3;
-			} 
+			}
 		}
+		
+		for (Tas t : tas) {
+			if (t.getNbr()>0) {
+				
+			
+			if (t.getName().contains("Verre")) {
+				int nbr=t.getNbr();
+				mat[t.getX()][t.getY()]=100+nbr;
+			}
+			else if (t.getName().contains("Métal")) {
+				int nbr=t.getNbr();
+				mat[t.getX()][t.getY()]=200+nbr;
+			}
+		}
+		
+		}	
+		
 		mat[robot.getX()][robot.getY()]=1;
 		
 		
@@ -96,6 +113,7 @@ public class Test {
 	    //Création d'une collection comprenant les dechets 
 		
 		List<Dechet> liste_dechet =collectionD(mat);
+		List<Tas>liste_tas=new ArrayList();
 		 
 		  //Itérateur de la collection pour pouvoir la parcourir
 		for(int i = 0; i < nb_dechets; i++){
@@ -107,10 +125,13 @@ public class Test {
 		Robot robot= objetR(mat);
 		robot.setFree(true);
 		
-		//Création dechet
+		//Création Tas
 		
 		Tas tVerre = new Tas();
 		Tas tMétal = new Tas();
+		
+		liste_tas.add(tVerre);
+		liste_tas.add(tMétal);
 		
 		Panel pan =new Panel(mat);
 		Fenetre fen0 = new Fenetre();
@@ -119,24 +140,24 @@ public class Test {
 
 		
 		
-		for (int u=0 ; u<20;u++) {
+		while(liste_dechet.size()!=0) {
 		if (robot.getFree()) {
 			int l =robot.dist_robot(liste_dechet);
 			Dechet d =liste_dechet.get(l);
 			
-			System.out.println("Coordonnées dechet");
-			System.out.println(d.getX());
-			System.out.println(d.getY());
-			System.out.println("******************");
+			//System.out.println("Coordonnées dechet");
+			//System.out.println(d.getX());
+			//System.out.println(d.getY());
+			//System.out.println("******************");
 			
 			while (robot.getX()!=d.getX() || robot.getY()!=d.getY()) {
 				robot.deplacement(d.getX(),d.getY());
-				System.out.println(robot.getX()+" "+robot.getY());
+				//System.out.println(robot.getX()+" "+robot.getY());
 				Thread.sleep(500);
 				
 				//Affichage de la fenetre
 				
-				MatriceAffichage(robot,liste_dechet,mat);
+				MatriceAffichage(robot,liste_dechet,mat,liste_tas);
 				Panel pan1 =new Panel(mat);
 				fen0.setContentPane(pan1);
 				fen0.setVisible(true);
@@ -158,15 +179,17 @@ public class Test {
 				
 				while(robot.getX()!=tVerre.getX() || robot.getY()!=tVerre.getY()) {
 					robot.deplacement(tVerre.getX(),tVerre.getY());
-					System.out.println(robot.getX()+" "+robot.getY());
+					//System.out.println(robot.getX()+" "+robot.getY());
 					Thread.sleep(500);
 					
 					//Affichage de la fenetre
-					MatriceAffichage(robot,liste_dechet,mat);
+					MatriceAffichage(robot,liste_dechet,mat,liste_tas);
 					Panel pan1 =new Panel(mat);
 					fen0.setContentPane(pan1);
 					fen0.setVisible(true);
 				}
+				robot.setFree(true);
+				tVerre.add_dechet(robot.getDechet());
 				
 			}
 			
@@ -179,17 +202,20 @@ public class Test {
 				}
 				while(robot.getX()!=tMétal.getX() || robot.getY()!=tMétal.getY()) {
 					robot.deplacement(tMétal.getX(),tMétal.getY());
-					System.out.println(robot.getX()+" "+robot.getY());
+					//System.out.println(robot.getX()+" "+robot.getY());
 					Thread.sleep(500);
 					
 					
 					//Affichage de la fenetre
-					MatriceAffichage(robot,liste_dechet,mat);
+					MatriceAffichage(robot,liste_dechet,mat,liste_tas);
 					Panel pan1 =new Panel(mat);
 					fen0.setContentPane(pan1);
 					fen0.setVisible(true);
 				}
-				
+				robot.setFree(true);
+				tMétal.add_dechet(robot.getDechet());
+				System.out.println(tMétal.getX());
+				System.out.println(tMétal.toString());
 			}
 			
 		}
