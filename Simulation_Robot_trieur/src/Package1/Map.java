@@ -19,7 +19,7 @@ public class Map {
 		return nb;
 	}
 	
-	public int[][] création_map(int l , int c, int nbr_dechets){
+	public int[][] création_map(int l , int c, int nbr_dechets, int nbr_robots){
 		// Matrice de 0 
 		int[][] mat_ini = new int[l][c];
 		for (int i=0;i<20;i++) {
@@ -27,9 +27,25 @@ public class Map {
         				mat_ini[i][j]=0;
         			}
 			}
-		//Positionnement du robot 
-		mat_ini[0][0]=1;
+		//Positionnement des robots
+		if(nbr_robots>=1) {
+			mat_ini[0][0]=1;
+		}
+		if(nbr_robots>=2) {
+			mat_ini[19][19]=1;
+		}
+		if(nbr_robots>=3) {
+			mat_ini[0][19]=1;
+		}
+		if(nbr_robots>=4) {
+			mat_ini[19][0]=1;
+		}
 		
+			
+		
+		
+		
+	
 		//Positionnement des dechets 
 		int cpt=0;
 		while(cpt != nbr_dechets) {
@@ -37,7 +53,7 @@ public class Map {
 			x=nb_aleatoire(0,20);
 			y=nb_aleatoire(0,20);
 			if (mat_ini[x][y] == 0) {
-				val=nb_aleatoire(2,4);
+				val=nb_aleatoire(2,5);
 				mat_ini[x][y]=val;
 				cpt+=1;
 			}

@@ -1,13 +1,16 @@
 package Package1;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 public class Fenetre extends JFrame{
 	/**
@@ -30,10 +33,14 @@ public class Fenetre extends JFrame{
         this.setResizable(true);
         this.isAlwaysOnTop();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.add(createToolBar(),BorderLayout.NORTH);
         
         
         
       }
+    
+    
+  
       
    
 }
