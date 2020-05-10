@@ -19,6 +19,8 @@ public class Map {
 		return nb;
 	}
 	
+	
+	//Fonction permettant de créer aléatoirement la matrice initiale
 	public int[][] création_map(int l , int c, int nbr_dechets, int nbr_robots){
 		// Matrice de 0 
 		int[][] mat_ini = new int[l][c];
@@ -42,9 +44,6 @@ public class Map {
 		}
 		
 			
-		
-		
-		
 	
 		//Positionnement des dechets 
 		int cpt=0;

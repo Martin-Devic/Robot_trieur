@@ -32,7 +32,7 @@ public class Test {
 		startb=a;
 	}
 	
-	//Méthode qui crée la liste des robots
+	//Méthode qui crée la liste des robots à partir de la matrice initiale
 		public static List collectionR(int [][] mat){
 			List<Robot> rob =new ArrayList<Robot>();
 			
@@ -51,35 +51,23 @@ public class Test {
 		
 	//Méthode qui crée la liste des dechets de la matrice initiale
 	public static List collectionD(int [][] mat){
-		//Dechet dech[];
 		List<Dechet> dech =new ArrayList<Dechet>();
-		//dech = new Dechet[40];
-		//int cpt=0;
 		for (int i=0;i<20;i++) {
 			for (int j=0;j<20;j++) {
+				
 				if (mat[i][j]==2) {
 		     		Dechet metal =new Métal(i,j);
-		     		
 		     		dech.add(metal);
-		     		
-		     		//cpt+=1;
-		
 		     	}
+				
 		     	else if (mat[i][j]==3) {
 		     		Dechet verre =new Verre(i,j);
-		     		
 		     		dech.add(verre);
-		     
-		     		//cpt+=1;
-		     		
 		     	}
+				
 		     	else if (mat[i][j]==4) {
 		     		Dechet plastique =new Plastique(i,j);
-		     		
 		     		dech.add(plastique);
-		     
-		     		//cpt+=1;
-		     		
 		     	}	
 
 		     }
@@ -87,22 +75,12 @@ public class Test {
 		return dech;
 	}
 	
-	//Méthode qui crée l'objet robot a partir de la matrice initiale
-	public static Robot objetR(int [][] mat) {
-		Robot robot=new Robot(0,0);
-		for (int i=0;i<20;i++) {
-			for (int j=0;j<20;j++) {
-				if (mat[i][j]==1) {
-					robot.setX(i);
-					robot.setY(j);
-				}
-			}
-		}
-		return robot;
-	}
 	
 	
-	//méthode modifiant la matrice qui permet de faire l'affichage
+	
+	
+	//méthode modifiant la matrice initiale a chaque deplacement de tous les robots 
+	//Chaque type d'objet possède un entier propre
 	public static void MatriceAffichage(List<Robot> robots ,List<Dechet> dechet,int[][] mat,List<Tas>tas) {
 		
 		for (int i=0;i<20;i++) {
@@ -162,11 +140,9 @@ public class Test {
 				
 		}
 		
-		
-		
-		
 	}
 	
+	//Méthode permettant d'afficher la matrice dependant de tous les objets sur la map 
 	public static void affichage_fenetre(int[][] mat, List<Robot> robots ,List<Dechet> dechet,List<Tas>tas,Fenetre fen0) {
 		MatriceAffichage(robots,dechet,mat,tas);
 		Panel pan1 =new Panel(mat);
@@ -176,7 +152,7 @@ public class Test {
 	}
 	
 
-	
+	//FONCTIONS AFFICHAGE FENETRE DE DEMARRAGE
 	//création barre de démarrage
   	private static JToolBar createToolBar() {
   		JToolBar tb =new JToolBar();
@@ -187,7 +163,8 @@ public class Test {
   		return tb;
   	}
   	
-  	//création panneau des boutons pour le nombre de robots
+  	//création d'un panneau comprennant des boutons permettant de décider du nombre de robots
+  	//présents sur le terrain
   	private static JPanel createBoutons() {
   		JPanel panneau =new JPanel();
   		JButton b1 = new JButton("1 robot");
@@ -203,50 +180,67 @@ public class Test {
   		panneau.add(b4);
   		return panneau;
   	}
-  
-	 public static void main(String[] args) throws InterruptedException {
-		 int nb_dechets =40;
-	
-		//Création fenetre de démarrage
-		Fenetre fen1 = new Fenetre();
-		fen1.setVisible(true);
-		JPanel start = new JPanel();
-		
-		start.add(createToolBar());
-		start.add(createBoutons());
-		String mot1="Robots en noir  /";
+  	//Création du texte expliquant le code couleur
+  	private static JLabel createTxt() {
+  		String mot1="Robots en noir  /";
 		String mot2="Verre en vert(lol) / ";
 		String mot3="Métal en bleu  /  ";
 		String mot4="Plastique en jaune  ";
-		
-		
 		JLabel txt =new JLabel(mot1+mot2+mot3+mot4);
-		start.add(txt);
+		return txt;
+  	}
+  //FIN FONCTIONS AFFICHAGE FENETRE DE DEMARRAGE 
+  	 
+  	
+//*******************************MAIN***************************************
+  	
+  	
+	 public static void main(String[] args) throws InterruptedException {
+		 
+		 //nombre de céchets définis a 40
+		 int nb_dechets =40;
+	
+		//Création fenetre de démarrage
+		Fenetre fen1 = new Fenetre(500,200);
+		
+		
+		//Ajout de la barre contenant le bouton start et d'un panneau contenant les boutons 
+		//choisissant le nombre de robots , puis Label contenant code couleur ,dans un panneau 
+		//principale contenu dans la fenetre de démarrage
+		
+		JPanel start = new JPanel();
+		
+		
+		start.add(createToolBar());
+		start.add(createBoutons());
+		start.add(createTxt());
 		fen1.setContentPane(start);
-		
-		
+		fen1.setVisible(true);
 		//condition de départ 
 		while(startb==false) {
 			Thread.sleep(1);
 		}
-
+		
+		
+		//dès que condition de depart est remplie , on rend la fenetre de demarrage invisible
+		fen1.setVisible(false);
 		
 		//Création matrice d'entier alatoire qui simule un terrain avec des 
-		//positions de déchets aléatoire et le robot situé en haut a droite (0,0)
+		//positions de 40 déchets répartis aléatoirement et de "nbr_robots" 
+		//robots repartis dans les coins
+		
 		int[][] mat_ini = new int[20][20];
-     
      	Map terrain = new Map(mat_ini);
 		int[][] mat = terrain.création_map(20,20, nb_dechets,nbr_robots);
 		
     
-	    //Création d'une collection comprenant les dechets 
-		
+	    //Création d'une liste comprenant tous les dechets quelquesoit leur type
 		List<Dechet> liste_dechet =collectionD(mat);
+		
+		//Création d'une liste comprenant les tas de chaque type de dechet
 		List<Tas>liste_tas=new ArrayList();
 		 
-		
-		//Création objet Robot
-		
+		//Création d'une liste comprenant tous les robots
 		List<Robot> liste_robots=collectionR(mat);
 		
 		
@@ -256,24 +250,29 @@ public class Test {
 		Tas tMétal = new Tas();
 		Tas tPlastique= new Tas();
 		
+		//Ajout de chaque tas dans la liste des tas
+		
 		liste_tas.add(tVerre);
 		liste_tas.add(tMétal);
 		liste_tas.add(tPlastique);
 		
-				
-		
-		
+		//Affichage de la configuration terrain à l'instant initial
 		
 		Panel pan =new Panel(mat);
-		Fenetre fen0 = new Fenetre();
+		Fenetre fen0 = new Fenetre(500,500);
 		fen0.setVisible(true);
 		fen0.setContentPane(pan);
-		System.out.println(nbr_robots);
 
 
-		
+		//DEMARRAGE DE LA BOUCLE 
+		//La boucle se termine lorsque la liste des dechets est vide ou que la somme des dechets
+		//de tous les tas est égale au nombre de déchets dans la liste dechet a l'instant initial
 		while ( liste_dechet.size()!=0 || ( tVerre.getNbr()+tMétal.getNbr()+tPlastique.getNbr() != nb_dechets ) ) {
+			
+			//Visualisation dans la console en temps réel de l'avancement des tas
 			System.out.println(" \n "+ tVerre.getNbr() + "/" + tMétal.getNbr()+"/"+tPlastique.getNbr());
+			
+			//parcourt a chaque boucle du while tous les robots de la liste 
 			for (Robot robot : liste_robots) {
 				
 				// si le robot est libre et cherche un dechet 
@@ -313,7 +312,7 @@ public class Test {
 							}
 						
 						}
-					//si la cible du robot est un dechet deja pris 
+					//si la cible du robot est un dechet deja pris
 					else {
 						robot.setCible(null);
 						continue;
@@ -323,6 +322,7 @@ public class Test {
 				//si le robot est chargé d'un dechet 
 				if( robot.getFree() == false ) {
 					
+					//si le dechet porté est de type Verre
 					if(robot.getDechet().toString().contains("Verre")) {
 						
 						//création du tas si il n'existe pas 
@@ -333,13 +333,15 @@ public class Test {
 							liste_dechet.remove(liste_dechet.get(p));
 							continue;
 							}
-						
+						//Si le tas et deja créé et que le robot est sur le tas ou sur une 
+						//cellule adjacente 
 						if (tVerre.getNbr()!=0 && (robot.stick_w(tVerre)||robot.on(tVerre))) {
 							robot.setFree(true);
 							tVerre.add_dechet(robot.getDechet());
 							
 							continue;
 						}
+						//Sinon 
 						if (tVerre.getNbr()!=0 ) {
 							robot.deplacement(tVerre.getX(),tVerre.getY());
 							continue;
@@ -371,7 +373,7 @@ public class Test {
 							}
 							
 					}
-					
+					//Si le dechet est de type Plastique
 					if(robot.getDechet().toString().contains("Plastique")) {
 						
 						if (tPlastique.getNbr()==0) {
@@ -396,6 +398,7 @@ public class Test {
 			}
 			}
 			Thread.sleep(150);
+			//affichage du terrain dès qu'on a parcouru tous les robots de la liste
 			affichage_fenetre(mat, liste_robots,liste_dechet,liste_tas,fen0);
 		
 		System.out.println(" \n "+ tVerre.getNbr() + "/" + tMétal.getNbr()+"/"+tPlastique.getNbr());
