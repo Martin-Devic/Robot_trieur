@@ -10,6 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 
 
@@ -128,10 +131,10 @@ public class Test {
 			else {
 				String ctype=r.getDechet().toString();
 				if (ctype.contains("Verre")){
-					mat[r.getX()][r.getY()] = 12;
+					mat[r.getX()][r.getY()] = 13;
 				}
 				if (ctype.contains("Métal")){
-					mat[r.getX()][r.getY()] = 13;
+					mat[r.getX()][r.getY()] = 12;
 				}
 				if (ctype.contains("Plastique")){
 					mat[r.getX()][r.getY()] = 14;
@@ -168,6 +171,7 @@ public class Test {
   	private static JPanel createBoutons() {
   		JPanel panneau =new JPanel();
   		JButton b1 = new JButton("1 robot");
+  		b1.addActionListener(new Bouton1rListener());
   		JButton b2 = new JButton("2 robots");
   		b2.addActionListener(new Bouton2rListener());
   		JButton b3 = new JButton("3 robots");
@@ -195,12 +199,13 @@ public class Test {
 //*******************************MAIN***************************************
   	
   	
-	 public static void main(String[] args) throws InterruptedException {
+	 public static void main(String[] args) throws InterruptedException, UnsupportedLookAndFeelException {
 		 
 		 //nombre de céchets définis a 40
 		 int nb_dechets =40;
 	
 		//Création fenetre de démarrage
+		UIManager.setLookAndFeel(new NimbusLookAndFeel());
 		Fenetre fen1 = new Fenetre(500,200);
 		
 		
@@ -214,7 +219,7 @@ public class Test {
 		start.add(createToolBar());
 		start.add(createBoutons());
 		start.add(createTxt());
-		fen1.setContentPane(start);
+		fen1.setContentPane(start); 
 		fen1.setVisible(true);
 		//condition de départ 
 		while(startb==false) {
@@ -294,12 +299,11 @@ public class Test {
 					// si la cible du robot est encore un dechet a terre
 					if ( liste_dechet.contains( robot.getCible() )){
 						
-						//si le robot est sur sa cible
-						if (robot.getX() == robot.getCible().getX() && robot.getY() == robot.getCible().getY()) {
+						//si le robot est sur sa cible ou à coté
+						if ((robot.getX() == robot.getCible().getX() && robot.getY() == robot.getCible().getY())||(robot.stick_w(robot.getCible()))) {
 							
 							robot.setFree(false);
 							robot.setDechet(robot.getCible());
-							
 							liste_dechet.remove(robot.getCible());
 							robot.setCible(null);
 						}

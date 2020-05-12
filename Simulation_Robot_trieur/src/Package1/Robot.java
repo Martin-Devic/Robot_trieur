@@ -45,6 +45,8 @@ public class Robot implements Coordonnées {
 		this.cible=cible;
 	}
 	
+	
+	
 	//GETTERS
 	
 	//position
@@ -94,16 +96,95 @@ public class Robot implements Coordonnées {
 		 }
 		 return d; 
 	 }
-	 
+	 //Méthode permettant d'eviter les déchets au sol
+/*	
+	 public void avoid_contact(int vX,int vY,int xd,int yd, List<Dechet> ld) {
+		 for (int k =0; k<ld.size();k++) {
+			 if (ld.get(k).getX()==this.getX() && ld.get(k).getY()==this.getY()) {
+				 if (vX==1) {
+					 this.setX(this.x-1);
+					 if (yd-this.getY()<0) {
+						 this.setY(this.y-1);
+					 }
+					 else {
+						 this.setY(this.y+1);
+					 } 
+				 }
+				 else if(vX==-1) {
+					 this.setX(this.x+1);
+					 if (yd-this.getY()<0) {
+						 this.setY(this.y-1);
+					 }
+					 else {
+						 this.setY(this.y+1);
+					 } 
+				 }
+				 else if (vY==1) {
+					 this.setY(this.x-1);
+					 if (xd-this.getX()<0) {
+						 this.setX(this.x-1);
+					 }
+					 else {
+						 this.setX(this.x+1);
+					 } 
+				 }
+				 else {
+					 this.setY(this.x+1);
+					 if (xd-this.getX()<0) {
+						 this.setX(this.x-1);
+					 }
+					 else {
+						 this.setX(this.x+1);
+					 } 
+				 }
+			 }
+		 }
+	 }
+*/	 
 	 //méthode de deplacement du robot avec en paramètre la cible du robot 
 	 //Déplacement en qui va etre suivant l'horizontale (x) dans un premier 
 	 //temps, puis suivant y dans un second temps 
-	 
-	 public void deplacement(int xd,int yd) {
+/*	 
+	 public void deplacement(int xd,int yd,List<Dechet> ld) {
 		 
 		 if ((this.x-xd)!=0){
 			 if ((this.x-xd)<0) {
 				 this.setX(x+1);
+				 this.avoid_contact(1,0, xd, yd, ld);
+				 return;
+			 }
+			 if ((this.x-xd>0) ) {
+				 this.setX(x-1);
+				 this.avoid_contact(-1,0, xd, yd, ld);
+				 return;		 
+			 }
+		 }
+		 
+		 
+		 if ((this.y-yd)!=0 ) {
+			 if ((this.y-yd)<0 ) {
+				 this.setY(y+1);
+				 this.avoid_contact(0,1, xd, yd, ld);
+				 return;
+			 }
+			 if ((this.y-yd>0)) {
+				 this.setY(y-1);
+				 this.avoid_contact(0,-1, xd, yd, ld);
+				 return;
+			 }
+		 }
+
+	 }
+	
+*/ 
+	 
+	 
+	 
+public void deplacement(int xd,int yd) {
+		 
+		 if ((this.x-xd)!=0){
+			 if ((this.x-xd)<0) {
+				 this.setX(x+1);				 
 				 return;
 			 }
 			 if ((this.x-xd>0) ) {
@@ -164,6 +245,22 @@ public class Robot implements Coordonnées {
 		int y=this.getY();
 		int tx=tas.getX();
 		int ty=tas.getY();
+		if ((x-tx==0)&&(Math.abs(y-ty)==1)) {
+			return true;
+		}
+		else if ((y-ty==0)&&(Math.abs(x-tx)==1)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public boolean stick_w(Dechet d) {
+		int x=this.getX();
+		int y=this.getY();
+		int tx=d.getX();
+		int ty=d.getY();
 		if ((x-tx==0)&&(Math.abs(y-ty)==1)) {
 			return true;
 		}
